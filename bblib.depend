@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1336446113 source:/home/michael/src/cpp/bblib/main.cpp
+	<iostream>
+	<list>
+	<pthread.h>
+	"bbio.h"
+
+1336446211 /home/michael/src/cpp/bblib/bbio.h
+	<fstream>
+	<sstream>
+	<string>
+	<iostream>
+
+1336445186 source:/home/michael/src/cpp/bblib/bbio.cpp
+	"bbio.h"
+
