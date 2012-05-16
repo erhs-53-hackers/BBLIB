@@ -16,23 +16,23 @@
 
 
 
-void digitalWrite(const char *pin, int value);
+void digitalWrite(char *pin, int value);
 
-int digitalRead(const char *pin);
+int digitalRead(char *pin);
 
-void exportPin(const char* pin);
+void exportPin(char* pin);
 
-void unExport(const char* pin);
+void unExport(char* pin);
 
-void digitalMode(const char* pin, int mode);
+void digitalMode(char* pin, int mode);
 
-long pulseIn(const char* pin, int value);
+long pulseIn(char* pin, int value);
 
-int analogRead(const char* pin);
+int analogRead(char* pin);
 
-void muxPin(const char* pin, int mode);
+void muxPin(char* pin, int mode);
 
-void PWMout(const char* pin, int frequency, int percent);
+void PWMout(char* pin, int frequency, int percent);
 
 void pinDemo();
 

@@ -8,7 +8,7 @@ $(BBLIB): $(MAIN.O) $(BBIO.O)
 	arm-linux-gnueabi-g++ $(MAIN.O) $(BBIO.O) -o bin/Debug/bblib
 
 $(MAIN.O): main.cpp bbio.h
-	arm-linux-gnueabi-g++ -Wall -c main.cpp -o $(MAIN.O)
+	arm-linux-gnueabi-g++ -W -Wall -c main.cpp -o $(MAIN.O)
 
 $(BBIO.O): bbio.c bbio.h gperf_pinMap.h
 	arm-linux-gnueabi-gcc -Wall -c bbio.c -o $(BBIO.O)

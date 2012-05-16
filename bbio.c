@@ -11,12 +11,9 @@ void pinDemo() {
 
 
 
-void digitalWrite(int pin, int value) {
+void digitalWrite(char *pin, int value) {
     char buf[29];
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", pin);
-
-
-
+    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
 
     FILE *file = fopen(buf, "w");
     //if (!file) throw 1;
@@ -39,12 +36,12 @@ void digitalWrite(int pin, int value) {
     */
 }
 
-int digitalRead(int pin) {
+int digitalRead( char *pin) {
 
     //FILE *file = fopen("/sys/class/gpio/gpio" + pin + "value");
     char buf[29];
 
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", pin);
+    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
 
 
     FILE *file = fopen(buf, "r");
@@ -79,32 +76,36 @@ int digitalRead(int pin) {
     return 0;
 }
 
-void exportPin(int pin) {
+void exportPin(char *pin) {
     FILE *file = fopen("/sys/class/gpio/export", "w");
-    char num[3];
-    snprintf(num, sizeof(num), "%i", pin);
+   
+    
+    char num[3];    
+    
+    snprintf(num, sizeof(num), "%i", getPin(pin, strlen(pin))->gpio);    
 
-    fputs(num, file);
+    fputs(num, file);    
 
     fclose(file);
+    
 
 }
 
-void unExport(int pin) {
+void unExport( char *pin) {
     FILE *file = fopen("/sys/class/gpio/unexport", "w");
     char num[3];
-    snprintf(num, sizeof(num), "%i", pin);
+    snprintf(num, sizeof(num), "%i", getPin(pin, strlen(pin))->gpio);
 
     fputs(num, file);
 
     fclose(file);
 }
 
-void digitalMode(int pin, int mode) {
+void digitalMode( char *pin, int mode) {
 
     char buf[33];
 
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/direction", pin);
+    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/direction", getPin(pin, strlen(pin))->gpio);
 
     FILE *file = fopen(buf, "w");
 //    if (!file) throw 1;
@@ -116,7 +117,7 @@ void digitalMode(int pin, int mode) {
 
 }
 
-long pulseIn(int pin, int value) {
+long pulseIn( char *pin, int value) {
     struct timeval tv;
 
     gettimeofday(&tv, NULL);

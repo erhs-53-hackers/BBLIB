@@ -38,8 +38,25 @@ void delay_micro(long int ms) {
 }
 
 int main() {
-    cout << "Hello world" << endl;
-    pinDemo();
+    cout << "Hello world!" << endl;
+    //pinDemo();
+    char *led = "P8_3";
+    cout<<"yo"<<endl;
+    exportPin(led);
+    cout << "exported"<<endl;
+    digitalMode(led, OUTPUT);
+    cout << "digital mode = out"<<endl;
+    
+    for(int i=0;i<10;i++) {
+    	digitalWrite(led, HIGH);
+    	cout << "write HIGH"<<endl;
+    	sleep(1);
+    	digitalWrite(led, LOW);
+    	cout << "write LOW"<<endl;
+    	sleep(1);    
+    }
+    
+    unExport(led);
     
 
 
