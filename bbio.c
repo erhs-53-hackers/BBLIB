@@ -11,41 +11,26 @@ void pinDemo() {
 
 
 
-void digitalWrite(char *pin, int value) {
+void digitalWrite(const char *pin, int value) {
     char buf[29];
     snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
 
-    FILE *file = fopen(buf, "w");
-    //if (!file) throw 1;
+    FILE *file = fopen(buf, "w");    
 
     if(value) fputc('1', file);
     else      fputc('0', file);
 
-    fclose(file);
-    /*
-    std::string pin_str;
-    std::stringstream out;
-    out << "/sys/class/gpio/gpio" << pin << "/value";
-    pin_str = out.str();
-
-    std::ofstream file(pin_str.c_str());
-
-    file << value;
-
-    file.close();
-    */
+    fclose(file); 
+    
 }
 
-int digitalRead( char *pin) {
-
-    //FILE *file = fopen("/sys/class/gpio/gpio" + pin + "value");
+int digitalRead(const char *pin) {    
     char buf[29];
 
     snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
 
 
     FILE *file = fopen(buf, "r");
-//    if (!file) throw 1;
 
     char value = fgetc(file);
 
@@ -56,29 +41,11 @@ int digitalRead( char *pin) {
 
 
 
-    /*
-        std::string pin_str;
-        std::stringstream out;
-        out << "/sys/class/gpio/gpio" << pin << "/value";
-        pin_str = out.str();
-
-        std::ifstream file(pin_str.c_str());
-
-        string value;
-
-        std::getline(file, value);
-
-        if(value == "1") {
-            return 1;
-        }
-        */
-
     return 0;
 }
 
-void exportPin(char *pin) {
-    FILE *file = fopen("/sys/class/gpio/export", "w");
-   
+void exportPin(const char *pin) {
+    FILE *file = fopen("/sys/class/gpio/export", "w");   
     
     char num[3];    
     
@@ -87,11 +54,9 @@ void exportPin(char *pin) {
     fputs(num, file);    
 
     fclose(file);
-    
-
 }
 
-void unExport( char *pin) {
+void unExport(const char *pin) {
     FILE *file = fopen("/sys/class/gpio/unexport", "w");
     char num[3];
     snprintf(num, sizeof(num), "%i", getPin(pin, strlen(pin))->gpio);
@@ -101,14 +66,13 @@ void unExport( char *pin) {
     fclose(file);
 }
 
-void digitalMode( char *pin, int mode) {
+void digitalMode(const char *pin, int mode) {
 
     char buf[33];
 
     snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/direction", getPin(pin, strlen(pin))->gpio);
 
     FILE *file = fopen(buf, "w");
-//    if (!file) throw 1;
 
     if(mode) fputs("out", file);
     else     fputs("in", file);
@@ -117,7 +81,7 @@ void digitalMode( char *pin, int mode) {
 
 }
 
-long pulseIn( char *pin, int value) {
+long pulseIn(const char *pin, int value) {
     struct timeval tv;
 
     gettimeofday(&tv, NULL);
@@ -167,4 +131,20 @@ long pulseIn( char *pin, int value) {
     // cout<<endl<<"done!"<<endl;
 
     return time;
+}
+
+void muxPin(const char* pin, int mode) {
+    char buf[44];
+
+    snprintf(buf, sizeof(buf), "/sys/kernel/debug/omap_mux/%s", getPin(pin, strlen(pin))->mux);
+    FILE *file = fopen(buf, "w");
+    
+    fprintf(file, "%i", mode);
+    
+    fclose(file);
+}
+
+void pwmWrite(const char* pin, int frequency, int percent) {
+
+}
 }
