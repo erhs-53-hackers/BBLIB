@@ -31,7 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="bbio.cpp" />
+		<Unit filename="bbio.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="bbio.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>

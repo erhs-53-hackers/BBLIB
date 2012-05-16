@@ -1,2 +1,5 @@
 bin/
 obj/
+*.*~
+*~
+gperf_pinMap.h
