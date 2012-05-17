@@ -38,7 +38,7 @@ void digitalWrite(const char *pin, int value) {
     }
     
     char buf[29];
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
+    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", p->gpio);
 
     FILE *file = fopen(buf, "w");    
 
@@ -50,9 +50,15 @@ void digitalWrite(const char *pin, int value) {
 }
 
 int digitalRead(const char *pin) {    
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: %s is not a digital pin\n", pin);
+        return 0;
+    }
     char buf[29];
 
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
+    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", p->gpio);
 
 
     FILE *file = fopen(buf, "r");
@@ -70,11 +76,17 @@ int digitalRead(const char *pin) {
 }
 
 void exportPin(const char *pin) {
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: %s is not gpio capable\n", pin);
+        return;
+    }
     FILE *file = fopen("/sys/class/gpio/export", "w");   
     
     char num[3];    
     
-    snprintf(num, sizeof(num), "%i", getPin(pin, strlen(pin))->gpio);    
+    snprintf(num, sizeof(num), "%i", p->gpio);    
 
     fputs(num, file);    
 
@@ -82,9 +94,15 @@ void exportPin(const char *pin) {
 }
 
 void unExport(const char *pin) {
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: %s is not a gpio pin\n", pin);
+        return;
+    }
     FILE *file = fopen("/sys/class/gpio/unexport", "w");
     char num[3];
-    snprintf(num, sizeof(num), "%i", getPin(pin, strlen(pin))->gpio);
+    snprintf(num, sizeof(num), "%i", p->gpio);
 
     fputs(num, file);
 
@@ -92,10 +110,16 @@ void unExport(const char *pin) {
 }
 
 void digitalMode(const char *pin, int mode) {
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: %s is not a digital pin\n", pin);
+        return;
+    }
 
     char buf[33];
 
-    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/direction", getPin(pin, strlen(pin))->gpio);
+    snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/direction", p->gpio);
 
     FILE *file = fopen(buf, "w");
 
@@ -107,6 +131,12 @@ void digitalMode(const char *pin, int mode) {
 }
 
 long pulseIn(const char *pin, int value) {
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: %s is not a digital pin\n", pin);
+        return 0;
+    }
     struct timeval tv;
 
     gettimeofday(&tv, NULL);
@@ -159,6 +189,12 @@ long pulseIn(const char *pin, int value) {
 }
 
 void muxPin(const char* pin, int mode) {
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: pin %s cannot be muxed\n", pin);
+        return;
+    }
     char buf[44];
 
     snprintf(buf, sizeof(buf), "/sys/kernel/debug/omap_mux/%s", getPin(pin, strlen(pin))->mux);
@@ -170,6 +206,12 @@ void muxPin(const char* pin, int mode) {
 }
 
 void pwmWrite(const char* pin, int frequency, int percent, int isrun) {
+    const struct pin *p = getPin(pin, strlen(pin));
+    
+    if(checkPin(p, 3) == 0) {
+        printf("Error: %s is not pwm capable\n", pin);
+        return;
+    }
     char pwm[26] = "/sys/class/pwm/";
     strcat(pwm, getPin(pin, strlen(pin))->pwm);
     

@@ -10,7 +10,7 @@ $(BBLIB): $(MAIN.O) $(BBIO.O)
 	$(Gpp) $(MAIN.O) $(BBIO.O) -o bin/Debug/bblib
 
 $(MAIN.O): main.cpp bbio.h
-	$(Gpp) -W -Wall -c main.cpp -o $(MAIN.O)
+	$(Gpp) -Wall -c main.cpp -o $(MAIN.O)
 
 $(BBIO.O): bbio.c bbio.h gperf_pinMap.h
 	$(GCC) -Wall -c bbio.c -o $(BBIO.O)
