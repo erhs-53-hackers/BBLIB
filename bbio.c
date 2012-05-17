@@ -144,7 +144,42 @@ void muxPin(const char* pin, int mode) {
     fclose(file);
 }
 
-void pwmWrite(const char* pin, int frequency, int percent) {
+void pwmWrite(const char* pin, int frequency, int percent, int isrun) {
+    char pwm[26] = "/sys/class/pwm/";
+    strcat(pwm, getPin(pin, strlen(pin))->pwm);
+    
+    char duty_percent[39] = "";
+    strcat(duty_percent, pwm);
+    strcat(duty_percent, "/duty_percent");
+    
+    char period_freq[38] = "";
+    strcat(period_freq, pwm);
+    strcat(period_freq, "/period_freq");
+    
+    char run[30] = "";
+    strcat(run, pwm);
+    strcat(run, "/run");    
+    
+    FILE *file = fopen(period_freq, "w");
+    fprintf(file,"%i", frequency);
+    fclose(file);
+    
+    
+    file = fopen(duty_percent, "w");
+    fprintf(file, "%i", percent);
+    fclose(file);
+    
+    
+    if(isrun == 1) {    	
+    	file = fopen(run, "w");
+    	fputs("1", file);
+    	fclose(file);   
+    } else {
+    	file = fopen(run, "w");
+    	fputs("0", file);
+    	fclose(file);    
+    }
+       
+    
+}
 
-}
-}

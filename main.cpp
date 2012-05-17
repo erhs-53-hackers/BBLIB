@@ -42,7 +42,19 @@ int main() {
     //pinDemo();
     
     char *pwm = "P9_14";
-    muxPin(pwm, 6);
+    muxPin(pwm, 6);   
+    for(int i=0;i<10;i++) {
+    	pwmWrite(pwm, 100, (i+1)*10, 1);
+    	cout<<(i+1)*10<<"%"<<endl;
+    	sleep(1);    
+    }
+    for(int i=0;i<10;i++) {
+    	pwmWrite(pwm, 100, (10-i)*10, 1);
+    	cout<<(10-i)*10<<"%"<<endl;
+    	sleep(1);    
+    }
+    pwmWrite(pwm, 0, 0, 0);
+    cout<<"0%"<<endl;
     /*
     exportPin(led);
     

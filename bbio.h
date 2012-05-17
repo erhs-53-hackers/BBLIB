@@ -32,7 +32,7 @@ int analogRead(const char* pin);
 
 void muxPin(const char* pin, int mode);
 
-void pwmWrite(const char* pin, int frequency, int percent);
+void pwmWrite(const char* pin, int frequency, int percent, int isrun);
 
 void pinDemo();
 
