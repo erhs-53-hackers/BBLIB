@@ -40,7 +40,8 @@ void delay_micro(long int ms) {
 int main() {
     cout << "Hello world!" << endl;
     //pinDemo();
-    
+    digitalWrite("P8_1", HIGH);
+    /*
     char *pwm = "P9_16";
     muxPin(pwm, 6); 
     cout<<"0%"<<endl;
@@ -57,6 +58,8 @@ int main() {
     }
     pwmWrite(pwm, 0, 0, 0);
     cout<<"0%"<<endl;
+    */
+    
     /*
     exportPin(led);
     

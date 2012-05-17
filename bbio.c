@@ -3,13 +3,13 @@
 void pinDemo() {
     char buf[BUFSIZ];
     while (gets (buf)) {
-       struct pin *p = getPin(buf, strlen (buf));
+       const struct pin *p = getPin(buf, strlen (buf));
        if(p) printf ("ID = %s\ngpio = %i\nmux = %s\neeprom = %i\npwm = %s\n", p->ID, p->gpio, p->mux, p->eeprom, p->pwm);
        else printf("nope\n");
     }
 }
 
-int checkPin(struct pin *p, int mode) {
+int checkPin(const struct pin *p, int mode) {
     if(!p) return 0;
     switch(mode){
         case 0:
@@ -30,10 +30,10 @@ int checkPin(struct pin *p, int mode) {
 
 
 void digitalWrite(const char *pin, int value) {
-    struct pin *p = getPin(pin, strlen(pin));
+    const struct pin *p = getPin(pin, strlen(pin));
     
     if(checkPin(p, 0) == 0) {
-        printf("Error: %s is not a digital pin", pin);
+        printf("Error: %s is not a digital pin\n", pin);
         return;
     }
     
