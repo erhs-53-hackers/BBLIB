@@ -9,9 +9,34 @@ void pinDemo() {
     }
 }
 
+int checkPin(struct pin *p, int mode) {
+    if(!p) return 0;
+    switch(mode){
+        case 0:
+            if(p->pgio != -1) return 1;
+        break;        
+        case 1:
+            if(p->mux != NULL) return 1;
+        break;        
+        case 2:
+            if(p->eeprom != -1) return 1;
+        break;        
+        case 3:
+            if(p->pwm != NULL) return 1;
+        break;        
+    }
+    return 0;
+}
 
 
 void digitalWrite(const char *pin, int value) {
+    struct pin *p = getPin(pin, strlen(pin))
+    
+    if(checkPin(p, 0) == 0) {
+        printf("Error: %s is not a digital pin", pin);
+        return;
+    }
+    
     char buf[29];
     snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", getPin(pin, strlen(pin))->gpio);
 
