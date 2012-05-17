@@ -13,7 +13,7 @@ int checkPin(struct pin *p, int mode) {
     if(!p) return 0;
     switch(mode){
         case 0:
-            if(p->pgio != -1) return 1;
+            if(p->gpio != -1) return 1;
         break;        
         case 1:
             if(p->mux != NULL) return 1;
@@ -30,7 +30,7 @@ int checkPin(struct pin *p, int mode) {
 
 
 void digitalWrite(const char *pin, int value) {
-    struct pin *p = getPin(pin, strlen(pin))
+    struct pin *p = getPin(pin, strlen(pin));
     
     if(checkPin(p, 0) == 0) {
         printf("Error: %s is not a digital pin", pin);

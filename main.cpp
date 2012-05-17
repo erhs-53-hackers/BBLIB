@@ -41,15 +41,17 @@ int main() {
     cout << "Hello world!" << endl;
     //pinDemo();
     
-    char *pwm = "P9_14";
-    muxPin(pwm, 6);   
+    char *pwm = "P9_16";
+    muxPin(pwm, 6); 
+    cout<<"0%"<<endl;
+    sleep(1);  
     for(int i=0;i<10;i++) {
-    	pwmWrite(pwm, 100, (i+1)*10, 1);
+    	pwmWrite(pwm, 200, (i+1)*10, 1);
     	cout<<(i+1)*10<<"%"<<endl;
     	sleep(1);    
     }
     for(int i=0;i<10;i++) {
-    	pwmWrite(pwm, 100, (10-i)*10, 1);
+    	pwmWrite(pwm, 200, (10-i)*10, 1);
     	cout<<(10-i)*10<<"%"<<endl;
     	sleep(1);    
     }

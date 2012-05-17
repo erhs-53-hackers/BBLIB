@@ -3,14 +3,14 @@ OBJ_DIR=obj/Debug
 BBLIB=$(BIN_DIR)/bblib
 MAIN.O=$(OBJ_DIR)/main.o
 BBIO.O=$(OBJ_DIR)/bbio.o
-G++=arm-linux-gnueabi-g++
+Gpp=arm-linux-gnueabi-g++
 GCC=arm-linux-gnueabi-gcc
 
 $(BBLIB): $(MAIN.O) $(BBIO.O)
-	$(G++) $(MAIN.O) $(BBIO.O) -o bin/Debug/bblib
+	$(Gpp) $(MAIN.O) $(BBIO.O) -o bin/Debug/bblib
 
 $(MAIN.O): main.cpp bbio.h
-	$(G++) -W -Wall -c main.cpp -o $(MAIN.O)
+	$(Gpp) -W -Wall -c main.cpp -o $(MAIN.O)
 
 $(BBIO.O): bbio.c bbio.h gperf_pinMap.h
 	$(GCC) -Wall -c bbio.c -o $(BBIO.O)
