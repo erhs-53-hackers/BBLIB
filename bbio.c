@@ -75,7 +75,7 @@ int digitalRead(const char *pin) {
     return 0;
 }
 
-void exportPin(const char *pin) {
+void exportGpio(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
     
     if(checkPin(p, 0) == 0) {
@@ -93,7 +93,7 @@ void exportPin(const char *pin) {
     fclose(file);
 }
 
-void unExport(const char *pin) {
+void unexportGpio(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
     
     if(checkPin(p, 0) == 0) {

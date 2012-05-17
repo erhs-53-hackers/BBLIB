@@ -61,7 +61,7 @@ int main() {
     
     
     /*
-    exportPin(led);
+    exportGpio(led);
     
     digitalMode(led, OUTPUT);
     
@@ -75,7 +75,7 @@ int main() {
     	sleep(1);    
     }
     
-    unExport(led);
+    unexportGpio(led);
     */
     
     

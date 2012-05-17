@@ -20,9 +20,9 @@ void digitalWrite(const char *pin, int value);
 
 int digitalRead(const char *pin);
 
-void exportPin(const char* pin);
+void exportGpio(const char* pin);
 
-void unExport(const char* pin);
+void unexportGpio(const char* pin);
 
 void digitalMode(const char* pin, int mode);
 
