@@ -7,20 +7,25 @@ Gpp=arm-linux-gnueabi-g++
 GCC=arm-linux-gnueabi-gcc
 
 $(BBLIB): $(MAIN.O) $(BBIO.O)
-	$(Gpp) $(MAIN.O) $(BBIO.O) -o bin/Debug/bblib
+	@echo Linking bblib...
+	@$(Gpp) $(MAIN.O) $(BBIO.O) -o bin/Debug/bblib
 
 $(MAIN.O): main.cpp bbio.h
-	$(Gpp) -Wall -c main.cpp -o $(MAIN.O)
+	@echo Building main.o... 
+	@$(Gpp) -Wall -c main.cpp -o $(MAIN.O)
 
 $(BBIO.O): bbio.c bbio.h gperf_pinMap.h
-	$(GCC) -Wall -c bbio.c -o $(BBIO.O)
+	@echo Building bbio.o
+	@$(GCC) -Wall -c bbio.c -o $(BBIO.O)
 	
 gperf_pinMap.h: pinMap.h
-	gperf -C -p -a -n -D -t -o -j 1 -k 2,3 -N getPin pinMap.h > gperf_pinMap.h
+	@echo Generating pinmap...
+	@gperf -C -p -a -n -D -t -o -j 1 -k 2,3 -N getPin pinMap.h > gperf_pinMap.h
 
 clean:
-	rm $(MAIN.O) $(BBIO.O) $(BBLIB) gperf_pinMap.h
+	@echo cleaning...
+	@rm $(MAIN.O) $(BBIO.O) $(BBLIB) gperf_pinMap.h
 
 upload:
-	scp bin/Debug/bblib root@10.42.0.76:/home/root/
+	@scp bin/Debug/bblib root@10.42.0.76:/home/root/
 
