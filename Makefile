@@ -28,4 +28,7 @@ clean:
 
 upload:
 	@scp bin/Debug/bblib root@10.42.0.76:/home/root/
+	
+deploy: $(BBLIB)
+	@scp bin/Debug/bblib root@10.42.0.76:/home/root/
 
