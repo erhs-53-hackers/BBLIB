@@ -2,4 +2,6 @@ bin/
 obj/
 *.*~
 *~
-gperf_pinMap.h
+*.o
+*.a
+cbblib/cbblib

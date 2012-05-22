@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1337384345 source:/home/michael/src/cpp/bblib/bblib/bbio.c
+	"bbio.h"
+	"gperf_pinMap.h"
+
+1337297556 /home/michael/src/cpp/bblib/bblib/bbio.h
+	<stdlib.h>
+	<sys/time.h>
+	<stdio.h>
+
+1337456097 /home/michael/src/cpp/bblib/bblib/gperf_pinMap.h
+	<stdio.h>
+	<string.h>
+
+1337460875 source:/home/michael/src/cpp/bblib/bblib/bbmath.c
+	"bbmath.h"
+
+1337460891 /home/michael/src/cpp/bblib/bblib/bbmath.h
+
+1337457308 source:/home/michael/src/cpp/bblib/bblib/main.c
+

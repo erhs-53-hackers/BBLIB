@@ -7,20 +7,26 @@
 		<Option compiler="armelfgcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/bblib" prefix_auto="1" extension_auto="1" />
+				<Option output="libbblib" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
-				<Option type="1" />
+				<Option type="2" />
 				<Option compiler="armelfgcc" />
+				<Option createDefFile="1" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/bblib" prefix_auto="1" extension_auto="1" />
+				<Option output="libbblib" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
 				<Option object_output="obj/Release/" />
-				<Option type="1" />
+				<Option type="2" />
 				<Option compiler="armelfgcc" />
+				<Option createDefFile="1" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-O2" />
 				</Compiler>
 				<Linker>
@@ -28,14 +34,16 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-Wall" />
-		</Compiler>
 		<Unit filename="bbio.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="bbio.h" />
-		<Unit filename="main.cpp" />
+		<Unit filename="bbmath.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="bbmath.h" />
+		<Unit filename="gperf_pinMap.h" />
+		<Unit filename="pinMap.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

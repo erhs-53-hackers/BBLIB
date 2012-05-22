@@ -131,27 +131,22 @@ void digitalMode(const char *pin, int mode) {
 }
 
 long pulseIn(const char *pin, int value) {
-    const struct pin *p = getPin(pin, strlen(pin));
-    
-    if(checkPin(p, 0) == 0) {
-        printf("Error: %s is not a digital pin\n", pin);
-        return 0;
-    }
+   
     struct timeval tv;
 
-    gettimeofday(&tv, NULL);
+    //gettimeofday(&tv, NULL);
     double last, time = 0;
 
-    puts("waiting for initial pulse...\n");
-    gettimeofday(&tv, NULL);
+    //puts("waiting for initial pulse...\n");
+    //gettimeofday(&tv, NULL);
 
 
-    last = tv.tv_usec * 1000;
+    //last = tv.tv_usec * 1000;
 
     while(1) {
-        gettimeofday(&tv, NULL);
-        double now = tv.tv_usec * 1000;
-        if(abs(now - last) > 1000 * 1000)return -1;
+        //gettimeofday(&tv, NULL);
+        //double now = tv.tv_usec * 1000;
+        //if(abs(now - last) > 1000 * 1000)return -1;
 
         //cout << ".";
         if(digitalRead(pin) == value) {
@@ -165,11 +160,11 @@ long pulseIn(const char *pin, int value) {
     gettimeofday(&tv, NULL);
     double start = tv.tv_usec * 1000;
 
-    puts("waiting for terminary pulse...\n");
+    //puts("waiting for terminary pulse...\n");
     while(1) {
         gettimeofday(&tv, NULL);
         double now = tv.tv_usec;
-        if(abs(now * 1000 - start) > 1000 * 1000)return -1;
+        //if(abs(now * 1000 - start) > 6000 * 1000)return -1;
         time += abs(last - now);
         last = now;
 

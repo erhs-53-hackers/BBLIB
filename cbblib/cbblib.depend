@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1337645398 source:/home/michael/src/cpp/bblib/cbblib/bbdrive.cpp
+	"bbdrive.h"
+	<bbmath.h>
+
+1337460831 /home/michael/src/cpp/bblib/cbblib/bbdrive.h
+
+1337645431 source:/home/michael/src/cpp/bblib/cbblib/PWM.cpp
+	"PWM.h"
+
+1337538194 /home/michael/src/cpp/bblib/cbblib/PWM.h
+	<bbio.h>
+
+1337650212 source:/home/michael/src/cpp/bblib/cbblib/main.cpp
+	<iostream>
+	<stdlib.h>
+	<pthread.h>
+	"PWM.hpp"
+
+1337650352 /home/michael/src/cpp/bblib/cbblib/PWM.hpp
+	<bbio.h>
+	<stdio.h>
+
