@@ -1,22 +1,25 @@
 #include <iostream>
 #include <stdlib.h>
 #include <pthread.h>
-#include "PWM.hpp"
-
+#include "bbdrive.hpp"
+extern "C" {
+#include <bbio.h>
+}
 using namespace std;
 
 int main() {
-    cout << "Hello world!" << endl;
-    PWM pwm("P9_14");
-    puts("init");
+    cout << "Hello world! digital" << endl;
+    //RobotDrive drive("P9_14", "P9_16");
+    //PWM pwm("P9_14");
+    //pwm.set(100);
+    const char *pin = "P8_3";
+    exportGpio(pin);
+    digitalMode(pin, OUTPUT);
+    digitalWrite(pin, HIGH);
+    sleep(3);
+    digitalWrite(pin, LOW);
+    unexportGpio(pin);
 
-    pwm.set(100);
-    puts("set\n");
-    sleep(5);
-    pwm.stop();
-    puts("stop");
-    sleep(1);
-    puts("done =)");
     /*
     const char *ping = "P8_3";
     exportGpio(ping);

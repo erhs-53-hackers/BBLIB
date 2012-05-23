@@ -1,15 +1,24 @@
 #pragma once
+#include "PWM.hpp"
 extern "C" {
 #include <bbmath.h>
 }
 
-class Robot {
+class RobotDrive {
 public:
-    Robot() {
+    RobotDrive() {
         isRightInverted = false;
         isLeftInverted = false;
     }
-    void attach(int Lmotor, int Rmotor) {}
+    RobotDrive(const char *left, const char *right) {
+        isRightInverted = false;
+        isLeftInverted = false;
+        attach(left, right);
+    }
+    void attach(const char *Lmotor, const char *Rmotor) {
+        left.attach(Lmotor);
+        right.attach(Rmotor);
+    }
 
     void move(double rotate, double move) {
         double L, R;
@@ -31,16 +40,16 @@ public:
             }
         }
 
-        //if(isRightInverted) right.write(_map(R, -1.0, 1.0, 0, 84 * 2));
-        //else right.write(_map(R, -1.0, 1.0, 84 * 2, 0));
+        right.set(map(R, -1.0, 1.0, 0, 100));
+        //else right.set(_map(R, -1.0, 1.0, 84 * 2, 0));
 
-        //if(isLeftInverted) left.write(_map(L, -1.0, 1.0, 0, 84 * 2));
+        left.set(map(L, -1.0, 1.0, 0, 100));
         //else left.write(_map(L, -1.0, 1.0, 84 * 2, 0));
 
     }
     bool isRightInverted, isLeftInverted;
 
 private:
-    //Servo right, left;
+    PWM right, left;
 
 };
