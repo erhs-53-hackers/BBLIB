@@ -7,6 +7,58 @@ extern "C" {
     #include <bbio.h>
 }
 using namespace std;
+//move this later
+class DigitalPin {
+public:
+    DigitalPin(){pin = NULL;}
+    DigitalPin(const char *pin) {
+        attach(pin, mode);
+    }
+    
+    void attach(const char *pin) {
+        this->pin = pin;        
+        exportGpio(pin);
+        digitalMode(pin, OUTPUT);
+        mode = OUTPUT;
+    }
+    
+    void set(int value) {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return;
+        }
+        if(mode == INPUT) digitalMode(pin, OUTPUT);
+        
+        digitalWrite(pin, value);
+    }
+    
+    int get() {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return;
+        }        
+        if(mode == OUTPUT) digitalMode(pin, INPUT);
+        
+        return digitalRead(pin);        
+    }
+    
+    long pulse(int mode) {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return;
+        }        
+        if(mode == OUTPUT) digitalMode(pin, INPUT);
+        
+        return pulseIn(pin, mode);
+    }
+private:
+    const char *pin;
+    int mode;
+    
+};
+//end
+
+
 
 bool isDebugMode() {
     //true  : debug
