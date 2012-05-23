@@ -3,10 +3,29 @@
 #include <pthread.h>
 #include "PWM.hpp"
 
+extern "C" {
+    #include <bbio.h>
+}
 using namespace std;
 
+bool isDebugMode() {
+    //true  : debug
+    //false : run
+    const char *pin = "P8_3";
+    exportGpio(pin);
+    digitalMode(pin, INPUT);
+    
+    bool value = digitalRead(pin);
+    
+    return value;    
+}
+
 int main() {
-    cout << "Hello world!" << endl;
+    if(isDebugMode()){
+        cout << "DEBUG MODE" <<endl;
+        return 0;
+    }
+    cout << "RUN MODE" << endl;
     PWM pwm("P9_14");
     puts("init");
 
