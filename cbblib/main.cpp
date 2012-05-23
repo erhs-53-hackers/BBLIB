@@ -1,25 +1,93 @@
 #include <iostream>
 #include <stdlib.h>
 #include <pthread.h>
-#include "bbdrive.hpp"
+#include "PWM.hpp"
+
 extern "C" {
-#include <bbio.h>
+    #include <bbio.h>
 }
 using namespace std;
+//move this later
+class DigitalPin {
+public:
+    DigitalPin(){pin = NULL;}
+    DigitalPin(const char *pin) {
+        attach(pin);
+    }
 
-int main() {
-    cout << "Hello world! digital" << endl;
-    //RobotDrive drive("P9_14", "P9_16");
-    //PWM pwm("P9_14");
-    //pwm.set(100);
+    void attach(const char *pin) {
+        this->pin = pin;
+        exportGpio(pin);
+        digitalMode(pin, OUTPUT);
+        mode = OUTPUT;
+    }
+
+    void set(int value) {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return;
+        }
+        if(mode == INPUT) digitalMode(pin, OUTPUT);
+
+        digitalWrite(pin, value);
+    }
+
+    int get() {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return 0;
+        }
+        if(mode == OUTPUT) digitalMode(pin, INPUT);
+
+        return digitalRead(pin);
+    }
+
+    long pulse(int mode) {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return 0;
+        }
+        if(mode == OUTPUT) digitalMode(pin, INPUT);
+
+        return pulseIn(pin, mode);
+    }
+private:
+    const char *pin;
+    int mode;
+
+};
+//end
+
+
+
+bool isDebugMode() {
+    //true  : debug
+    //false : run
     const char *pin = "P8_3";
     exportGpio(pin);
-    digitalMode(pin, OUTPUT);
-    digitalWrite(pin, HIGH);
-    sleep(3);
-    digitalWrite(pin, LOW);
-    unexportGpio(pin);
+    digitalMode(pin, INPUT);
 
+    bool value = digitalRead(pin);
+
+    return value;
+}
+
+int main() {
+    if(isDebugMode()){
+        cout << "DEBUG MODE" <<endl;
+        return 0;
+    }
+    cout << "RUN MODE" << endl;
+    PWM pwm("P9_14");
+    puts("init");
+
+    pwm.set(100);
+    puts("set\n");
+    sleep(5);
+    pwm.stop();
+    puts("stop");
+    sleep(1);
+    puts("done =)");
     /*
     const char *ping = "P8_3";
     exportGpio(ping);
