@@ -10,10 +10,18 @@ public:
     DigitalPin(const char *pin) {
         attach(pin);
     }
+    ~DigitalPin() {
+        release();
+    }
+
+    void release() {
+        unexportGpio(pin);
+    }
 
     void attach(const char *pin) {
         this->pin = pin;
         exportGpio(pin);
+        muxPin(pin, 0x37);
         digitalMode(pin, OUTPUT);
         mode = OUTPUT;
     }
@@ -23,7 +31,10 @@ public:
             puts("Pin not initialized!");
             return;
         }
-        if(mode == INPUT) digitalMode(pin, OUTPUT);
+        if(mode == INPUT) {
+            muxPin(pin, 0x37);
+            digitalMode(pin, OUTPUT);
+        }
 
         digitalWrite(pin, value);
     }
@@ -33,7 +44,10 @@ public:
             puts("Pin not initialized!");
             return 0;
         }
-        if(mode == OUTPUT) digitalMode(pin, INPUT);
+        if(mode == OUTPUT){
+            muxPin(pin, 0x27);
+            digitalMode(pin, INPUT);
+        }
 
         return digitalRead(pin);
     }
@@ -43,7 +57,10 @@ public:
             puts("Pin not initialized!");
             return 0;
         }
-        if(mode == OUTPUT) digitalMode(pin, INPUT);
+        if(mode == OUTPUT){
+            muxPin(pin, 0x27);
+            digitalMode(pin, INPUT);
+        }
 
         return pulseIn(pin, mode);
     }

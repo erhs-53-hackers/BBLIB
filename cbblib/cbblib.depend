@@ -11,11 +11,13 @@
 1337538194 /home/michael/src/cpp/bblib/cbblib/PWM.h
 	<bbio.h>
 
-1337732522 source:/home/michael/src/cpp/bblib/cbblib/main.cpp
+1337814267 source:/home/michael/src/cpp/bblib/cbblib/main.cpp
 	<iostream>
 	<stdlib.h>
 	<pthread.h>
-	"bbdrive.hpp"
+	"PWM.hpp"
+	"DigitalPin.hpp"
+	<bbio.h>
 
 1337732731 /home/michael/src/cpp/bblib/cbblib/PWM.hpp
 	<bbio.h>
@@ -24,4 +26,8 @@
 1337730878 /home/michael/src/cpp/bblib/cbblib/bbdrive.hpp
 	"PWM.hpp"
 	<bbmath.h>
+
+1337814425 /home/michael/src/cpp/bblib/cbblib/DigitalPin.hpp
+	<bbio.h>
+	<stdio.h>
 

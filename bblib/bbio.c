@@ -14,16 +14,16 @@ int checkPin(const struct pin *p, int mode) {
     switch(mode){
         case 0:
             if(p->gpio != -1) return 1;
-        break;        
+        break;
         case 1:
             if(p->mux != NULL) return 1;
-        break;        
+        break;
         case 2:
             if(p->eeprom != -1) return 1;
-        break;        
+        break;
         case 3:
             if(p->pwm != NULL) return 1;
-        break;        
+        break;
     }
     return 0;
 }
@@ -31,27 +31,27 @@ int checkPin(const struct pin *p, int mode) {
 
 void digitalWrite(const char *pin, int value) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 0) == 0) {
         printf("Error: %s is not a digital pin\n", pin);
         return;
     }
-    
+
     char buf[29];
     snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%i/value", p->gpio);
 
-    FILE *file = fopen(buf, "w");    
+    FILE *file = fopen(buf, "w");
 
     if(value) fputc('1', file);
     else      fputc('0', file);
 
-    fclose(file); 
-    
+    fclose(file);
+
 }
 
-int digitalRead(const char *pin) {    
+int digitalRead(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 0) == 0) {
         printf("Error: %s is not a digital pin\n", pin);
         return 0;
@@ -77,25 +77,25 @@ int digitalRead(const char *pin) {
 
 void exportGpio(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 0) == 0) {
         printf("Error: %s is not gpio capable\n", pin);
         return;
     }
-    FILE *file = fopen("/sys/class/gpio/export", "w");   
-    
-    char num[3];    
-    
-    snprintf(num, sizeof(num), "%i", p->gpio);    
+    FILE *file = fopen("/sys/class/gpio/export", "w");
 
-    fputs(num, file);    
+    char num[3];
+
+    snprintf(num, sizeof(num), "%i", p->gpio);
+
+    fputs(num, file);
 
     fclose(file);
 }
 
 void unexportGpio(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 0) == 0) {
         printf("Error: %s is not a gpio pin\n", pin);
         return;
@@ -111,7 +111,7 @@ void unexportGpio(const char *pin) {
 
 void digitalMode(const char *pin, int mode) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 0) == 0) {
         printf("Error: %s is not a digital pin\n", pin);
         return;
@@ -131,7 +131,7 @@ void digitalMode(const char *pin, int mode) {
 }
 
 long pulseIn(const char *pin, int value) {
-   
+
     struct timeval tv;
 
     //gettimeofday(&tv, NULL);
@@ -185,7 +185,7 @@ long pulseIn(const char *pin, int value) {
 
 void muxPin(const char* pin, int mode) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 0) == 0) {
         printf("Error: pin %s cannot be muxed\n", pin);
         return;
@@ -194,54 +194,54 @@ void muxPin(const char* pin, int mode) {
 
     snprintf(buf, sizeof(buf), "/sys/kernel/debug/omap_mux/%s", getPin(pin, strlen(pin))->mux);
     FILE *file = fopen(buf, "w");
-    
-    fprintf(file, "%i", mode);
-    
+
+    fprintf(file, "%x", mode);
+
     fclose(file);
 }
 
 void pwmWrite(const char* pin, int frequency, int percent, int isrun) {
     const struct pin *p = getPin(pin, strlen(pin));
-    
+
     if(checkPin(p, 3) == 0) {
         printf("Error: %s is not pwm capable\n", pin);
         return;
     }
     char pwm[26] = "/sys/class/pwm/";
     strcat(pwm, getPin(pin, strlen(pin))->pwm);
-    
+
     char duty_percent[39] = "";
     strcat(duty_percent, pwm);
     strcat(duty_percent, "/duty_percent");
-    
+
     char period_freq[38] = "";
     strcat(period_freq, pwm);
     strcat(period_freq, "/period_freq");
-    
+
     char run[30] = "";
     strcat(run, pwm);
-    strcat(run, "/run");    
-    
+    strcat(run, "/run");
+
     FILE *file = fopen(period_freq, "w");
     fprintf(file,"%i", frequency);
     fclose(file);
-    
-    
+
+
     file = fopen(duty_percent, "w");
     fprintf(file, "%i", percent);
     fclose(file);
-    
-    
-    if(isrun == 1) {    	
+
+
+    if(isrun == 1) {
     	file = fopen(run, "w");
     	fputs("1", file);
-    	fclose(file);   
+    	fclose(file);
     } else {
     	file = fopen(run, "w");
     	fputs("0", file);
-    	fclose(file);    
+    	fclose(file);
     }
-       
-    
+
+
 }
 
