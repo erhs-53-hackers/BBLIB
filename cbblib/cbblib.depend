@@ -11,7 +11,8 @@
 1337538194 /home/michael/src/cpp/bblib/cbblib/PWM.h
 	<bbio.h>
 
-1337814267 source:/home/michael/src/cpp/bblib/cbblib/main.cpp
+1338222375 source:/home/michael/src/cpp/bblib/cbblib/main.cpp
+	"Serial.hpp"
 	<iostream>
 	<stdlib.h>
 	<pthread.h>
@@ -19,7 +20,7 @@
 	"DigitalPin.hpp"
 	<bbio.h>
 
-1337732731 /home/michael/src/cpp/bblib/cbblib/PWM.hpp
+1338058357 /home/michael/src/cpp/bblib/cbblib/PWM.hpp
 	<bbio.h>
 	<stdio.h>
 
@@ -27,7 +28,15 @@
 	"PWM.hpp"
 	<bbmath.h>
 
-1337814425 /home/michael/src/cpp/bblib/cbblib/DigitalPin.hpp
+1337814932 /home/michael/src/cpp/bblib/cbblib/DigitalPin.hpp
 	<bbio.h>
 	<stdio.h>
+
+1338222323 /home/michael/src/cpp/bblib/cbblib/Serial.hpp
+	<stdio.h>
+	<string.h>
+	<unistd.h>
+	<fcntl.h>
+	<errno.h>
+	<termios.h>
 

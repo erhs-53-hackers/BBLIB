@@ -194,8 +194,11 @@ void muxPin(const char* pin, int mode) {
 
     snprintf(buf, sizeof(buf), "/sys/kernel/debug/omap_mux/%s", getPin(pin, strlen(pin))->mux);
     FILE *file = fopen(buf, "w");
+    puts(buf);
 
     fprintf(file, "%x", mode);
+
+    printf("wrote: %x\n", mode);
 
     fclose(file);
 }
