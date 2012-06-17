@@ -1,23 +1,30 @@
 #pragma once
 #include "PWM.hpp"
+#include "Serial.hpp"
+#include "Driveable.hpp"
+#include <stdlib.h>
 extern "C" {
 #include <bbmath.h>
 }
 
 class RobotDrive {
 public:
-    RobotDrive() {
+    RobotDrive(Driveable *left, Driveable *right){
         isRightInverted = false;
         isLeftInverted = false;
+        this->left = left;
+        this->right = right;
     }
-    RobotDrive(const char *left, const char *right) {
-        isRightInverted = false;
-        isLeftInverted = false;
-        attach(left, right);
+    ~RobotDrive() {
+        move(0,0);
+
     }
-    void attach(const char *Lmotor, const char *Rmotor) {
-        left.attach(Lmotor);
-        right.attach(Rmotor);
+
+    void mapValues(long Lmin, long Lmax, long Rmin, long Rmax) {
+        this->Lmin  = Lmin;
+        this->Lmax = Lmax;
+        this->Rmin  = Rmin;
+        this->Rmax = Rmax;
     }
 
     void move(double rotate, double move) {
@@ -40,16 +47,28 @@ public:
             }
         }
 
-        right.set(map(R, -1.0, 1.0, 0, 100));
-        //else right.set(_map(R, -1.0, 1.0, 84 * 2, 0));
 
-        left.set(map(L, -1.0, 1.0, 0, 100));
-        //else left.write(_map(L, -1.0, 1.0, 84 * 2, 0));
+        if(isRightInverted) right->set(map(R,-1, 1, Rmin, Rmax));
+        else right->set(map(R * -1,-1, 1, Rmin, Rmax));
+
+        if(isLeftInverted) left->set(map(L,-1, 1, Lmin, Lmax));
+        else left->set(map(L * -1,-1, 1, Lmin, Lmax));
+
+
+
+
+
+        printf("left: %f, right: %f\n", L, R);
+        printf("Lval: %f, Rval: %f\n", map(L,-1, 1, Lmin, Lmax), map(R,-1, 1, Rmin, Rmax));
+
+
 
     }
     bool isRightInverted, isLeftInverted;
 
 private:
-    PWM right, left;
+    Driveable *left, *right;
+    long Rmin, Rmax, Lmin, Lmax;
+
 
 };

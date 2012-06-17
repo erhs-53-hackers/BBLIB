@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "PWM.hpp"
+#include "Driveable.hpp"
 #include "DigitalPin.hpp"
+#include "bbdrive.hpp"
 
 
 extern "C" {
@@ -43,16 +45,58 @@ bool isDebugMode() {
 }
 
 
-
 int main() {
-    //exportGpio("P8_11");
-    //printf("yo:%#x\n\n\n", 39);
+
+    muxPin("P9_21", 1);
+
+    Serial serial(PORT, B19200);
+    RobotDrive drive(&serial, &serial);
+    drive.mapValues(1+30, 127-30, 128+30, 255-30);
+
+    const double speed = 0.7;
+    drive.move(speed, 0);
+    sleep(2);
+    drive.move(-speed, 0);
+    sleep(2);
+    drive.move(0, speed);
+    sleep(2);
+    drive.move(0, -speed);
+    sleep(2);
+    drive.move(0,0);
+
+
+
+    /*
     cout << "yo"<<endl;
     muxPin("P9_21", 1);
+
     Serial serial(PORT, B19200);
 
-    serial.writeString("Hello world\n");
-    serial.writeString("HOW IS YOU BE DOINZZZZZZZ!\n");
+    //serial.writeInt(64);
+    //serial.writeInt(192);
+
+
+    for(int i=1+30; i<128-30; i++) {//128
+        cout <<"writing: " << i << endl;
+        serial.writeInt(i);
+        serial.writeInt(192);
+        usleep(100000);
+    }
+    cout <<"writing: " << 64 << endl;
+    serial.writeInt(64);
+
+    for(int i=128+30; i<256-30; i++) {//128
+        cout <<"writing: " << i << endl;
+        serial.writeInt(i);
+        serial.writeInt(64);
+        usleep(100000);
+    }
+    cout <<"writing: " << 192 << endl;
+    serial.writeInt(192);
+    */
+
+
+    //serial.writeString("HOW IS YOU BE DOINZZZZZZZ!\n");
 
 
 

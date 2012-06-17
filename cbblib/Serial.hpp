@@ -5,9 +5,10 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <termios.h>
+#include "Driveable.hpp"
 //#include <string>
 
-class Serial {
+class Serial : public Driveable{
 public:
     Serial(const char* port, int buadrate) {
         fd = open(port, O_RDWR | O_NOCTTY | O_NDELAY);
@@ -31,6 +32,17 @@ public:
     void writeString(const char* str) {
         write(fd, str, strlen(str));
     }
+
+    void set(int percent){
+        writeInt(percent);
+    }
+
+    void writeInt(int i) {
+        char str[2] = "";
+        str[0] = (char)i;
+        write(fd, str, strlen(str));
+    }
+
 
     //void write_(std::string str) {
         //write(fd, str.c_str(), str.size());

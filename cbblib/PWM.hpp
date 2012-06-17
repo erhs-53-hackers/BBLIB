@@ -1,10 +1,11 @@
 #pragma once
+#include "Driveable.hpp"
 extern "C" {
     #include <bbio.h>
     #include <stdio.h>
 }
 
-class PWM {
+class PWM : Driveable{
 public:
     PWM() {}
     PWM(const char *pin) {
