@@ -85,7 +85,7 @@ def digitalWrite(pin, status):
 		fw.close()
 	else:
 		print "digitalWrite error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
-	
+
 def digitalRead(pin):
 	"""digitalRead(pin) returns HIGH or LOW for a given pin."""
 	if pin in digitalPinDef:
@@ -104,7 +104,8 @@ def digitalRead(pin):
 def analogRead(pin):
 	"""analogRead(pin) returns analog value for a given pin."""
 	if pin in analogPinDef:
-		fileName = "/sys/devices/platform/tsc/" + (analogPinDef[pin])
+		#fileName = "/sys/devices/platform/tsc/" + (analogPinDef[pin])
+		fileName = "/sys/bus/platform/devices/tsc/" + (analogPinDef[pin])
 		fw = file(fileName, "r")
 		data = fw.read()
 		fw.close()
@@ -113,15 +114,6 @@ def analogRead(pin):
 		print "analogRead error: Pin " + pin + " is not defined as an analog in pin in the pin definition."
 		return -1;
 
-def muxPin(pin, mode):
-	"""muxPin(pin, mode) changes the configuration of the pin"""
-
-def pwmWrite():
-	"""pwmWrite() sends outputs a pwm signal from a specified pwm pin"""
-
-def analogWrite():
-
-	
 def pinUnexport(pin):
 	"""pinUnexport(pin) closes a pin in sysfs. This is susally 
 	called by cleanup() when a script is exiting."""
