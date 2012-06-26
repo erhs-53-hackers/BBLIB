@@ -1,13 +1,22 @@
+#include "Serial.hpp"
 #include <iostream>
 #include <stdlib.h>
 #include <pthread.h>
 #include "PWM.hpp"
+#include "Driveable.hpp"
 #include "DigitalPin.hpp"
+#include "bbdrive.hpp"
+
 
 extern "C" {
 #include <bbio.h>
 }
 using namespace std;
+
+#define BAUDRATE 19200
+#define PORT "/dev/ttyO2"
+#define MUX_MODE 1
+
 
 
 long microsecondsToInches(long microseconds) {
@@ -30,67 +39,66 @@ bool isDebugMode() {
     //true  : debug
     //false : run
     const char *pin = "P8_3";
-
     DigitalPin gate(pin);
-
-    //gate.set(1);
-
     bool value = gate.get();
-
-    /*
-    exportGpio(pin);
-    muxPin(pin, 0x27);
-
-    bool value = digitalRead(pin);
-
-    cout << digitalRead(pin) << ";" << value;
-
-    unexportGpio(pin);
-    */
-
     return value;
 }
 
+
 int main() {
-    //exportGpio("P8_11");
-    //printf("yo:%#x\n\n\n", 39);
-    if(isDebugMode()) {
-        cout << "DEBUG MODE" <<endl;
-        return 0;
-    }
-    cout << "RUN MODE" << endl;
+
+    muxPin("P9_21", 1);
+
+    Serial serial(PORT, B19200);
+    RobotDrive drive(&serial, &serial);
+    drive.mapValues(1+30, 127-30, 128+30, 255-30);
+
+    const double speed = 0.7;
+    drive.move(speed, 0);
+    sleep(2);
+    drive.move(-speed, 0);
+    sleep(2);
+    drive.move(0, speed);
+    sleep(2);
+    drive.move(0, -speed);
+    sleep(2);
+    drive.move(0,0);
+
+
+
     /*
+    cout << "yo"<<endl;
+    muxPin("P9_21", 1);
 
-    DigitalPin led("P8_4");
+    Serial serial(PORT, B19200);
 
-    for(int i=0;i<10;i++) {
-        led.set(1);
-        sleep(1);
-        led.set(0);
-        sleep(1);
+    //serial.writeInt(64);
+    //serial.writeInt(192);
+
+
+    for(int i=1+30; i<128-30; i++) {//128
+        cout <<"writing: " << i << endl;
+        serial.writeInt(i);
+        serial.writeInt(192);
+        usleep(100000);
     }
+    cout <<"writing: " << 64 << endl;
+    serial.writeInt(64);
+
+    for(int i=128+30; i<256-30; i++) {//128
+        cout <<"writing: " << i << endl;
+        serial.writeInt(i);
+        serial.writeInt(64);
+        usleep(100000);
+    }
+    cout <<"writing: " << 192 << endl;
+    serial.writeInt(192);
     */
 
 
+    //serial.writeString("HOW IS YOU BE DOINZZZZZZZ!\n");
 
-    const char *ping = "P8_3";
-    exportGpio(ping);
 
-    while(1) {
-        digitalMode(ping, OUTPUT);
-        digitalWrite(ping, LOW);
-        //usleep(20);
-        digitalWrite(ping, HIGH);
-        //usleep(50);
-        digitalWrite(ping, LOW);
-
-        digitalMode(ping, INPUT);
-
-        long time = pulseIn(ping, HIGH);
-
-        cout <<"Time: "<<time<<", "<<microsecondsToCentimeters(time)<<" cm"<<endl;
-        usleep(100000);
-    }
 
 
 
