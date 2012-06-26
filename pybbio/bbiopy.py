@@ -54,6 +54,10 @@ analogPinDef = {
 			"P9.39":	"ain0",
 			"P9.40":	"ain1"}
 
+pwmPinDef = {
+			"P9.14":	"gpmc_a2",
+			"P9.16":	"gpmc_a3"}
+
 def pinMode(pin, direction):
 	"""pinMode(pin, direction) opens (exports)  a pin for use and 
 	sets the direction"""
@@ -72,6 +76,17 @@ def pinMode(pin, direction):
 	else:
 		print "pinMode error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
 
+def muxPin(pin, mode):
+	"""pinMode(pin, mode) changes muxes a pin for a different use"""
+	if pin in analogPinDef:
+		fw = file("/sys/kernel/debug/omap_mux/" + digitalPinDef[pin], "w")
+		fw.write("%d" % mode)
+	else if pin in pwmPinDef:
+		fw = file("/sys/kernel/debug/omap_mux/" + pwmPinDef[pin], "w")
+		fw.write("%d" % mode)
+	else:
+		print "The pin %s is not able to be muxed" % pin
+	fw.close()
 
 def digitalWrite(pin, status):
 	"""digitalWrite(pin, status) sets a pin HIGH or LOW"""
@@ -113,6 +128,9 @@ def analogRead(pin):
 	else:
 		print "analogRead error: Pin " + pin + " is not defined as an analog in pin in the pin definition."
 		return -1;
+
+def pwmWrite(pin, frequency, percent, isrun):
+	print "pwmWrite() is not currently implemented"
 
 def pinUnexport(pin):
 	"""pinUnexport(pin) closes a pin in sysfs. This is susally 
