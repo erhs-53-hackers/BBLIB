@@ -58,6 +58,10 @@ pwmPinDef = {
 			"P9.14":	"gpmc_a2",
 			"P9.16":	"gpmc_a3"}
 
+ehrpwmDef = {
+			"P9.14":	"ehrpwm.0:",
+			"P9.16":	"ehrpwm.1:"}
+
 def pinMode(pin, direction):
 	"""pinMode(pin, direction) opens (exports)  a pin for use and 
 	sets the direction"""
