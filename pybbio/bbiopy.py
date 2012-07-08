@@ -81,11 +81,11 @@ def pinMode(pin, direction):
 		print "pinMode error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
 
 def muxPin(pin, mode):
-	"""pinMode(pin, mode) changes muxes a pin for a different use"""
+	"""muxPin(pin, mode) changes muxes a pin for a different use"""
 	if pin in analogPinDef:
 		fw = file("/sys/kernel/debug/omap_mux/" + digitalPinDef[pin], "w")
 		fw.write("%d" % mode)
-	else if pin in pwmPinDef:
+	elif pin in pwmPinDef:
 		fw = file("/sys/kernel/debug/omap_mux/" + pwmPinDef[pin], "w")
 		fw.write("%d" % mode)
 	else:
