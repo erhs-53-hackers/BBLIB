@@ -49,6 +49,17 @@ void digitalWrite(const char *pin, int value) {
 
 }
 
+void fastDigitalWrite(const char *pin, int value) {
+
+    FILE *file = fopen(pin, "w");
+
+    if(value) fputc('1', file);
+    else      fputc('0', file);
+
+    fclose(file);
+
+}
+
 int digitalRead(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
 
@@ -74,6 +85,15 @@ int digitalRead(const char *pin) {
 
     return 0;
 }
+
+int fastDigitalRead(const char *pin) {
+    FILE *file = fopen(pin, "r");
+    char value = fgetc(file);
+    fclose(file);
+    if(value == '1') return 1;
+    return 0;
+}
+
 
 void exportGpio(const char *pin) {
     const struct pin *p = getPin(pin, strlen(pin));
@@ -130,55 +150,85 @@ void digitalMode(const char *pin, int mode) {
 
 }
 
-long pulseIn(const char *pin, int value) {
+void fastDigitalMode(const char *pin, int mode) {
+    FILE *file = fopen(pin, "w");
 
-    struct timeval tv;
+    if(mode) fputs("out", file);
+    else     fputs("in", file);
 
-    //gettimeofday(&tv, NULL);
-    double last, time = 0;
+    fclose(file);
 
-    //puts("waiting for initial pulse...\n");
-    //gettimeofday(&tv, NULL);
+}
 
+long pulseIn(const char *pin, int value, double timeout) {
+    struct timeval tempo1, tempo2;
 
-    //last = tv.tv_usec * 1000;
+    long elapsed_utime;    /* elapsed time in microseconds */
+    //long elapsed_mtime;    /* elapsed time in milliseconds */
+    long elapsed_seconds;  /* diff between seconds counter */
+    long elapsed_useconds; /* diff between microseconds counter */
+    //gettimeofday(&tempo1, NULL);
 
+    gettimeofday(&tempo1, NULL);
+    //puts("waiting for start");
     while(1) {
-        //gettimeofday(&tv, NULL);
-        //double now = tv.tv_usec * 1000;
-        //if(abs(now - last) > 1000 * 1000)return -1;
-
-        //cout << ".";
         if(digitalRead(pin) == value) {
-            gettimeofday(&tv, NULL);
+            gettimeofday(&tempo1, NULL);
 
-            last = tv.tv_usec;
+            //last = tv.tv_usec;
             break;
         }
-    }
-    //cout <<endl;
-    gettimeofday(&tv, NULL);
-    double start = tv.tv_usec * 1000;
 
-    //puts("waiting for terminary pulse...\n");
+        gettimeofday(&tempo2, NULL);
+        elapsed_seconds  = tempo2.tv_sec  - tempo1.tv_sec;
+        elapsed_useconds = tempo2.tv_usec - tempo1.tv_usec;
+        elapsed_utime = (elapsed_seconds) * 1000000 + elapsed_useconds;
+
+        if(elapsed_utime >= timeout * 1000000) return -1;
+    }
+
+
+
+    //puts("waiting for end");
+
     while(1) {
-        gettimeofday(&tv, NULL);
-        double now = tv.tv_usec;
-        //if(abs(now * 1000 - start) > 6000 * 1000)return -1;
-        time += abs(last - now);
-        last = now;
-
-
-        //cout << ".";
         if(digitalRead(pin) != value) {
-            gettimeofday(&tv, NULL);
-            double now = tv.tv_usec;
-            time += abs(last - now);
+            gettimeofday(&tempo2, NULL);
 
             break;
         }
+        gettimeofday(&tempo2, NULL);
+        elapsed_seconds  = tempo2.tv_sec  - tempo1.tv_sec;
+        elapsed_useconds = tempo2.tv_usec - tempo1.tv_usec;
+        elapsed_utime = (elapsed_seconds) * 1000000 + elapsed_useconds;
+
+        if(elapsed_utime >= timeout * 1000000) return -1;
     }
-    // cout<<endl<<"done!"<<endl;
+
+    elapsed_seconds  = tempo2.tv_sec  - tempo1.tv_sec;
+    elapsed_useconds = tempo2.tv_usec - tempo1.tv_usec;
+
+    elapsed_utime = (elapsed_seconds) * 1000000 + elapsed_useconds;
+    //elapsed_mtime = ((elapsed_seconds) * 1000 + elapsed_useconds/1000.0) + 0.5;
+    return elapsed_utime;
+}
+
+long fastPulseIn(const char *pin, int value) {
+    struct timeval tv;
+    double last, time = 0;
+    gettimeofday(&tv, NULL);
+    last = tv.tv_usec;
+
+
+    while(1) {
+        if(fastDigitalRead(pin) != value) {
+            break;
+        }
+        gettimeofday(&tv, NULL);
+
+        time += abs(last - tv.tv_usec);
+        last = tv.tv_usec;
+    }
 
     return time;
 }

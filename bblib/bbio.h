@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <stdio.h>
+#include <time.h>
 
 //#include <string.h>
 
@@ -18,7 +19,11 @@
 
 void digitalWrite(const char *pin, int value);
 
+void fastDigitalWrite(const char *pin, int value);
+
 int digitalRead(const char *pin);
+
+int fastDigitalRead(const char *pin);
 
 void exportGpio(const char* pin);
 
@@ -26,7 +31,11 @@ void unexportGpio(const char* pin);
 
 void digitalMode(const char* pin, int mode);
 
-long pulseIn(const char* pin, int value);
+void fastDigitalMode(const char* pin, int mode);
+
+long pulseIn(const char* pin, int value, double timeout);
+
+long fastPulseIn(const char* pin, int value);
 
 int analogRead(const char* pin);
 
