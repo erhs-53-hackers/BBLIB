@@ -54,6 +54,14 @@ analogPinDef = {
 			"P9.39":	"ain0",
 			"P9.40":	"ain1"}
 
+pwmPinDef = {
+			"P9.14":	"gpmc_a2",
+			"P9.16":	"gpmc_a3"}
+
+ehrpwmDef = {
+			"P9.14":	"ehrpwm.0:",
+			"P9.16":	"ehrpwm.1:"}
+
 def pinMode(pin, direction):
 	"""pinMode(pin, direction) opens (exports)  a pin for use and 
 	sets the direction"""
@@ -72,6 +80,17 @@ def pinMode(pin, direction):
 	else:
 		print "pinMode error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
 
+def muxPin(pin, mode):
+	"""muxPin(pin, mode) changes muxes a pin for a different use"""
+	if pin in analogPinDef:
+		fw = file("/sys/kernel/debug/omap_mux/" + digitalPinDef[pin], "w")
+		fw.write("%d" % mode)
+	elif pin in pwmPinDef:
+		fw = file("/sys/kernel/debug/omap_mux/" + pwmPinDef[pin], "w")
+		fw.write("%d" % mode)
+	else:
+		print "The pin %s is not able to be muxed" % pin
+	fw.close()
 
 def digitalWrite(pin, status):
 	"""digitalWrite(pin, status) sets a pin HIGH or LOW"""
@@ -85,7 +104,7 @@ def digitalWrite(pin, status):
 		fw.close()
 	else:
 		print "digitalWrite error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
-	
+
 def digitalRead(pin):
 	"""digitalRead(pin) returns HIGH or LOW for a given pin."""
 	if pin in digitalPinDef:
@@ -104,7 +123,8 @@ def digitalRead(pin):
 def analogRead(pin):
 	"""analogRead(pin) returns analog value for a given pin."""
 	if pin in analogPinDef:
-		fileName = "/sys/devices/platform/tsc/" + (analogPinDef[pin])
+		#fileName = "/sys/devices/platform/tsc/" + (analogPinDef[pin])
+		fileName = "/sys/bus/platform/devices/tsc/" + (analogPinDef[pin])
 		fw = file(fileName, "r")
 		data = fw.read()
 		fw.close()
@@ -113,15 +133,9 @@ def analogRead(pin):
 		print "analogRead error: Pin " + pin + " is not defined as an analog in pin in the pin definition."
 		return -1;
 
-def muxPin(pin, mode):
-	"""muxPin(pin, mode) changes the configuration of the pin"""
+def pwmWrite(pin, frequency, percent, isrun):
+	print "pwmWrite() is not currently implemented"
 
-def pwmWrite():
-	"""pwmWrite() sends outputs a pwm signal from a specified pwm pin"""
-
-def analogWrite():
-
-	
 def pinUnexport(pin):
 	"""pinUnexport(pin) closes a pin in sysfs. This is susally 
 	called by cleanup() when a script is exiting."""
