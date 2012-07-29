@@ -10,14 +10,9 @@
 
 extern "C" {
 #include <bbio.h>
+//#include <gperf_pinMap.h>
 }
 using namespace std;
-
-#define BAUDRATE 19200
-#define PORT "/dev/ttyO2"
-#define MUX_MODE 1
-
-
 
 long microsecondsToInches(long microseconds) {
     // According to Parallax's datasheet for the PING))), there are
@@ -44,59 +39,40 @@ bool isDebugMode() {
     return value;
 }
 
-
 int main() {
 
-    muxPin("P9_21", 1);
+    long duration, inches, cm;
 
-    Serial serial(PORT, B19200);
-    RobotDrive drive(&serial, &serial);
-    drive.mapValues(1+30, 127-30, 128+30, 255-30);
+    const char* pingPin = "P9_15";
+    exportGpio(pingPin);
 
-    const double speed = 0.7;
-    drive.move(speed, 0);
-    sleep(2);
-    drive.move(-speed, 0);
-    sleep(2);
-    drive.move(0, speed);
-    sleep(2);
-    drive.move(0, -speed);
-    sleep(2);
-    drive.move(0,0);
+    int pin = 48;
+    char fastPin[29];
+    snprintf(fastPin, sizeof(fastPin), "/sys/class/gpio/gpio%i/value", pin);
 
 
-
-    /*
-    cout << "yo"<<endl;
-    muxPin("P9_21", 1);
-
-    Serial serial(PORT, B19200);
-
-    //serial.writeInt(64);
-    //serial.writeInt(192);
+    while(true) {
+        digitalMode(pingPin, OUTPUT);
+        digitalWrite(pingPin, LOW);
+        usleep(2);
+        digitalWrite(pingPin, HIGH);
+        usleep(5);
+        digitalWrite(pingPin, LOW);
 
 
-    for(int i=1+30; i<128-30; i++) {//128
-        cout <<"writing: " << i << endl;
-        serial.writeInt(i);
-        serial.writeInt(192);
-        usleep(100000);
+        digitalMode(pingPin, INPUT);
+        duration = pulseIn(pingPin, HIGH, 0.4);
+
+
+
+        inches = microsecondsToInches(duration);
+        cm = microsecondsToCentimeters(duration);
+
+        cout << "cm = " << cm << ", duration = " << duration <<endl;
+        usleep(3000);
     }
-    cout <<"writing: " << 64 << endl;
-    serial.writeInt(64);
-
-    for(int i=128+30; i<256-30; i++) {//128
-        cout <<"writing: " << i << endl;
-        serial.writeInt(i);
-        serial.writeInt(64);
-        usleep(100000);
-    }
-    cout <<"writing: " << 192 << endl;
-    serial.writeInt(192);
-    */
 
 
-    //serial.writeString("HOW IS YOU BE DOINZZZZZZZ!\n");
 
 
 

@@ -20,7 +20,8 @@
 					<Add library="/home/michael/src/cpp/bblib/bblib/libbblib.a" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="#scp cbblib root@10.42.0.76:/home/root/" />
+					<Add after="scp -r . ubuntu@10.42.0.80:/home/ubuntu/" />
+					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
 			<Target title="Release">

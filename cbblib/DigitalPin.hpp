@@ -62,7 +62,7 @@ public:
             digitalMode(pin, INPUT);
         }
 
-        return pulseIn(pin, mode);
+        return pulseIn(pin, mode, 5);
     }
 private:
     const char *pin;
