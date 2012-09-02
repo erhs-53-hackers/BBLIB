@@ -20,7 +20,7 @@
 					<Add library="/home/michael/src/cpp/bblib/bblib/libbblib.a" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="scp -r . ubuntu@10.42.0.80:/home/ubuntu/" />
+					<Add after="scp cbblib root@10.42.0.76:/home/root/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -40,8 +40,10 @@
 				</Linker>
 			</Target>
 		</Build>
+		<Unit filename="DigitalPin.hpp" />
 		<Unit filename="Driveable.hpp" />
 		<Unit filename="PWM.hpp" />
+		<Unit filename="Ping.hpp" />
 		<Unit filename="Serial.hpp" />
 		<Unit filename="bbdrive.hpp" />
 		<Unit filename="main.cpp" />

@@ -11,6 +11,9 @@ public:
     PWM(const char *pin) {
         attach(pin);
     }
+    ~PWM() {
+        stop();
+    }
     void attach(const char *pin) {
         pwm = pin;
         muxPin(pin, 6);

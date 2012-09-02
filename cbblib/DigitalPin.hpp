@@ -26,6 +26,34 @@ public:
         mode = OUTPUT;
     }
 
+    void on() {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return;
+        }
+        if(mode == INPUT) {
+            muxPin(pin, 0x37);
+            digitalMode(pin, OUTPUT);
+            mode = OUTPUT;
+        }
+
+        digitalWrite(pin, HIGH);
+    }
+
+     void off() {
+        if(pin == NULL) {
+            puts("Pin not initialized!");
+            return;
+        }
+        if(mode == INPUT) {
+            muxPin(pin, 0x37);
+            digitalMode(pin, OUTPUT);
+            mode = OUTPUT;
+        }
+
+        digitalWrite(pin, LOW);
+    }
+
     void set(int value) {
         if(pin == NULL) {
             puts("Pin not initialized!");
@@ -34,6 +62,7 @@ public:
         if(mode == INPUT) {
             muxPin(pin, 0x37);
             digitalMode(pin, OUTPUT);
+            mode = OUTPUT;
         }
 
         digitalWrite(pin, value);
@@ -47,23 +76,27 @@ public:
         if(mode == OUTPUT){
             muxPin(pin, 0x27);
             digitalMode(pin, INPUT);
+            mode = OUTPUT;
         }
 
         return digitalRead(pin);
     }
 
-    long pulse(int mode) {
+    long pulse(int mode, double timeout = 5) {
         if(pin == NULL) {
             puts("Pin not initialized!");
             return 0;
         }
-        if(mode == OUTPUT){
+        if(this->mode == OUTPUT){
             muxPin(pin, 0x27);
             digitalMode(pin, INPUT);
+            this->mode = INPUT;
         }
 
-        return pulseIn(pin, mode, 5);
+        return pulseIn(pin, mode, timeout);
     }
+
+
 private:
     const char *pin;
     int mode;

@@ -30,7 +30,7 @@ int main() {
 
 
         cout << "cm = " << ping.getCm() <<endl;
-        usleep(3000);
+        usleep(5000);
     }
 
 

@@ -7,7 +7,7 @@ extern "C" {
 
 class Ping {
 private:
-    const char* pin;
+    DigitalPin pin;
     double timeout;
     long microsecondsToInches(long microseconds) {
         // According to Parallax's datasheet for the PING))), there are
@@ -26,30 +26,23 @@ private:
     }
 
     long pulse() {
-        digitalMode(pin, OUTPUT);
-        digitalWrite(pin, LOW);
+        pin.off();
         usleep(2);
-        digitalWrite(pin, HIGH);
+        pin.on();
         usleep(5);
-        digitalWrite(pin, LOW);
+        pin.off();
 
-
-        digitalMode(pin, INPUT);
-
-        return pulseIn(pin, HIGH, timeout);;
+        return pin.pulse(HIGH, timeout);
     }
 
 public:
     Ping(const char* pin) {
-        this->pin = pin;
-        exportGpio(pin);
+        this->pin.attach(pin);
         this->timeout = 0.4;
     }
 
     Ping(const char* pin, double timeout) {
-        this->pin = pin;
-        exportGpio(pin);
-
+        this->pin.attach(pin);
         this->timeout = timeout;
     }
 
