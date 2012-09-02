@@ -1,4 +1,16 @@
 """Arduino-like library for Python on BeagleBone"""
+# pinMode(pin, direction)                   
+# muxPin(pin, mode)                         Nick Yaculak
+# digitalWrite                              
+# digitalRead                               
+# analogRead                                
+# pwmWrite(pin, frequency, percent, isrun)  Nick Yaculak
+# pinUnexport(pin)                          
+# cleanup()                                 
+# delay(millis)                             
+# millis()                                  
+# run(setup, main)                          Alexander Hiam
+
 import time
 
 HIGH = "HIGH"
@@ -62,7 +74,7 @@ ehrpwmDef = {
 			"P9.14":	"ehrpwm.0:",
 			"P9.16":	"ehrpwm.1:"}
 
-def pinMode(pin, direction):
+def pinMode(pin, direction): #fully-functional
 	"""pinMode(pin, direction) opens (exports)  a pin for use and 
 	sets the direction"""
 	if pin in digitalPinDef:
@@ -80,7 +92,7 @@ def pinMode(pin, direction):
 	else:
 		print "pinMode error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
 
-def muxPin(pin, mode):
+def muxPin(pin, mode): # untested
 	"""muxPin(pin, mode) changes muxes a pin for a different use"""
 	if pin in analogPinDef:
 		fw = file("/sys/kernel/debug/omap_mux/" + digitalPinDef[pin], "w")
@@ -92,7 +104,7 @@ def muxPin(pin, mode):
 		print "The pin %s is not able to be muxed" % pin
 	fw.close()
 
-def digitalWrite(pin, status):
+def digitalWrite(pin, status): # fully functional
 	"""digitalWrite(pin, status) sets a pin HIGH or LOW"""
 	if pin in digitalPinDef:
 		fileName = "/sys/class/gpio/gpio%d/value" % (digitalPinDef[pin])
@@ -105,7 +117,7 @@ def digitalWrite(pin, status):
 	else:
 		print "digitalWrite error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
 
-def digitalRead(pin):
+def digitalRead(pin): # untested
 	"""digitalRead(pin) returns HIGH or LOW for a given pin."""
 	if pin in digitalPinDef:
 		fileName = "/sys/class/gpio/gpio%d/value" % (digitalPinDef[pin])
@@ -120,7 +132,7 @@ def digitalRead(pin):
 		print "digitalRead error: Pin " + pin + " is not defined as a digital I/O pin in the pin definition."
 		return -1;
 
-def analogRead(pin):
+def analogRead(pin): # untested
 	"""analogRead(pin) returns analog value for a given pin."""
 	if pin in analogPinDef:
 		#fileName = "/sys/devices/platform/tsc/" + (analogPinDef[pin])
@@ -133,17 +145,17 @@ def analogRead(pin):
 		print "analogRead error: Pin " + pin + " is not defined as an analog in pin in the pin definition."
 		return -1;
 
-def pwmWrite(pin, frequency, percent, isrun):
+def pwmWrite(pin, frequency, percent, isrun): # unimplemented
 	print "pwmWrite() is not currently implemented"
 
-def pinUnexport(pin):
+def pinUnexport(pin): # fully functional
 	"""pinUnexport(pin) closes a pin in sysfs. This is susally 
 	called by cleanup() when a script is exiting."""
 	fw = file("/sys/class/gpio/unexport", "w")
 	fw.write("%d" % (pin))
 	fw.close()
 
-def cleanup():
+def cleanup(): # fully functional
 	"""	takes care of stepping through pins that were set with
 	pinMode and unExports them. Prints result"""
 	def find_key(dic, val):
@@ -154,12 +166,12 @@ def cleanup():
 		pinUnexport(pin)
 		print find_key(digitalPinDef, pin),
 
-def delay(millis):
+def delay(millis): # fully functional
 	"""delay(millis) sleeps the script for a given number of 
 	milliseconds"""
 	time.sleep(millis/1000.0)
 
-def millis():
+def millis(): # fully functional
 	"""millis() returns an int for the number of milliseconds since 
 	the script started."""
 	return int((time.time() - startTime) * 1000)
